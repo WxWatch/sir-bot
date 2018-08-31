@@ -2,13 +2,13 @@
   "name": "sir-bot",
   "version": "1.0.0",
   "description": "A Discord Bot for Sir Ver",
-  "main": "app.ts",
   "scripts": {
+    "start:"
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "jjj"
+    "url": "https://gitlab.com/WxWatch/sir-bot.git"
   },
   "author": "James Glenn <jglenn1@gmail.com>",
   "license": "MIT",
