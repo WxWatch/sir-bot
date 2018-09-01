@@ -5,7 +5,12 @@ import { logger } from './logger';
 import { ICommand, CommandRegistrationResult, ICron } from './interfaces';
 
 const client = new Client();
-const token = process.env.DISCORD_TOKEN || 'NDg1MTAxMTM1MDI4Mjg5NTc3.DmrpRA.PsFvFqLpWvjkeM0GU5g7vvMvOlg';
+const token = process.env.DISCORD_TOKEN;
+
+if (!token) {
+    logger.error('DISCORD_TOKEN not set!');
+    process.exit(1);
+}
 
 let commands: ICommand[] = [];
 let crons: ICron[] = [];

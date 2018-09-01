@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "A Discord Bot for Sir Ver",
   "scripts": {
-    "start": "tsc && node dist/app.js",
+    "start": "npm install && tsc && node app.js",
+    "start:dev": "tsc && node dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
