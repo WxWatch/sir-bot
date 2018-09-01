@@ -34,8 +34,7 @@ const registerCrons = (client: Client) => {
 const loadCrons = async () => {
     const crons = [];
     const files = glob.sync('./cron/**/*', {
-        ignore: './cron/**/*.map',
-        cwd: './dist'
+        ignore: './cron/**/*.map'
     });
     logger.info(`Loading ${files.length} crons`);
     for (const file of files) {
@@ -57,8 +56,7 @@ const registerListeners = (client: Client) => {
 const loadCommands = async (): Promise<ICommand[]> => {
     const commands = [];
     const files = glob.sync('./commands/**/*', {
-        ignore: './commands/**/*.map',
-        cwd: './dist'
+        ignore: './commands/**/*.map'
     });
     logger.info(`Loading ${files.length} commands`);
     for (const file of files) {
