@@ -1,8 +1,8 @@
-import { Client, Message } from 'discord.js';
+import { Client } from 'discord.js';
 import * as glob from 'glob';
 
 import { logger } from './logger';
-import { ICommand, CommandRegistrationResult, ICron } from './interfaces';
+import { ICommand, ICron } from './interfaces';
 
 const client = new Client();
 const token = process.env.DISCORD_TOKEN;
