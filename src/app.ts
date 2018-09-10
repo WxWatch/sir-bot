@@ -77,4 +77,7 @@ const registerCommands = async (commands: ICommand[]) => {
 
 registerListeners(client);
 registerCrons(client);
+
+client.on('error', logger.error);
+
 client.login(token);
