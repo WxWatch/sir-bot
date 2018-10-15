@@ -13,7 +13,7 @@ const cron: ICron = {
         if (!channel) {
             return;
         }
-        channel.send(`PSA: Contrary to some people's beliefs, AMD Ryzen processers are not as good Intel Core series processors`);
+        channel.send(`PSA: Contrary to some people's beliefs, AMD Ryzen processers are not as good as Intel Core series processors`);
     }
 };
 
