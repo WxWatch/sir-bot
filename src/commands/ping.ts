@@ -3,7 +3,7 @@ import { Client, Message } from 'discord.js';
 
 const register = (client: Client) => {
     client.on('message', (message: Message) => {
-        if (message.content === 'ping') {
+        if (message.content.toLowerCase() === 'ping') {
             message.reply('pong');
         }
     });
