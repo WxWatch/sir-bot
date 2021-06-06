@@ -4,7 +4,7 @@ import (
 	"wxwatch.dev/bot/src/cache"
 	"wxwatch.dev/bot/src/commands"
 	"wxwatch.dev/bot/src/discord"
-	"wxwatch.dev/bot/src/listener"
+	"wxwatch.dev/bot/src/leveling"
 )
 
 type Server struct {
@@ -33,11 +33,13 @@ func (s *Server) Start() error {
 		Cache: s.cache,
 	}
 	router := commands.NewCommandRouter(routerOptions)
-	listener := listener.NewMessageCreateListener()
+	// listener := listener.NewMessageCreateListener()
+	levelingListener := leveling.NewLevelingListener()
 
 	handlers := []interface{}{
 		router.Route,
-		listener.Listen,
+		levelingListener.Listen,
+		// listener.Listen,
 	}
 
 	s.bot.Setup(handlers)

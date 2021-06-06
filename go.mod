@@ -5,5 +5,6 @@ go 1.15
 require (
 	github.com/agnivade/levenshtein v1.1.0
 	github.com/bwmarrin/discordgo v0.23.2
+	github.com/stretchr/testify v1.7.0 // indirect
 	go.uber.org/zap v1.16.0
 )
