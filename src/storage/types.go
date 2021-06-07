@@ -42,11 +42,18 @@ func WithGuildID(guildID string) Option {
 	return guildIDOption{GuildID: guildID}
 }
 
+// ByLevel implements sort.Interface based on the Level field.
+type ByLevel []*User
+
+func (a ByLevel) Len() int           { return len(a) }
+func (a ByLevel) Less(i, j int) bool { return a[i].Level < a[j].Level }
+func (a ByLevel) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+
 type User struct {
-	ID         string
-	GuildID    string
-	Experience uint
-	Level      uint
+	ID         string `json:"user_id"`
+	GuildID    string `json:"guild_id"`
+	Experience uint   `json:"experience"`
+	Level      uint   `json:"level"`
 }
 
 func NewUser(opts ...Option) *User {

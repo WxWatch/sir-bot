@@ -1,6 +1,9 @@
 package storage
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type InMemoryStorage struct {
 	users map[string]*User
@@ -20,6 +23,17 @@ func (s *InMemoryStorage) GetUser(guildID string, userID string) (*User, error) 
 	}
 
 	return user, nil
+}
+
+func (s *InMemoryStorage) GetUsers(guildID string) ([]*User, error) {
+	users := make([]*User, 0)
+	for _, user := range s.users {
+		if strings.HasPrefix(user.PrimaryKey(), guildID) {
+			users = append(users, user)
+		}
+	}
+
+	return users, nil
 }
 
 func (s *InMemoryStorage) SaveUser(user *User) error {

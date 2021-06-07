@@ -5,6 +5,7 @@ import (
 	"wxwatch.dev/bot/src/commands"
 	"wxwatch.dev/bot/src/discord"
 	"wxwatch.dev/bot/src/leveling"
+	"wxwatch.dev/bot/src/storage"
 )
 
 type Server struct {
@@ -29,12 +30,16 @@ func NewServer(options *Options) *Server {
 }
 
 func (s *Server) Start() error {
+	storage := storage.NewFlatFileStorage()
 	routerOptions := &commands.Options{
-		Cache: s.cache,
+		Cache:   s.cache,
+		Storage: storage,
 	}
 	router := commands.NewCommandRouter(routerOptions)
 	// listener := listener.NewMessageCreateListener()
-	levelingListener := leveling.NewLevelingListener()
+	levelingListener := leveling.NewLevelingListener(
+		leveling.WithStorage(storage),
+	)
 
 	handlers := []interface{}{
 		router.Route,

@@ -5,7 +5,10 @@ import (
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
+	"wxwatch.dev/bot/pkg/commander"
 	"wxwatch.dev/bot/src/cache"
+	"wxwatch.dev/bot/src/leveling"
+	"wxwatch.dev/bot/src/storage"
 )
 
 const prefix = "!"
@@ -16,21 +19,30 @@ type Command struct {
 }
 
 type CommandRouter struct {
-	commands []*Command
-	cache    *cache.Cache
+	commands    []*Command
+	newCommands []*commander.Command
+	cache       *cache.Cache
 }
 
 type Options struct {
-	Cache *cache.Cache
+	Cache   *cache.Cache
+	Storage storage.Storage
 }
 
 func NewCommandRouter(options *Options) *CommandRouter {
+	leveling := leveling.NewLeveling(
+		leveling.WithStorage(options.Storage),
+	)
+	levelingCommand := leveling.RegisterCommands()
 	return &CommandRouter{
 		commands: []*Command{
 			Help,
 			Ping,
 			Pong,
 			CruiseFact,
+		},
+		newCommands: []*commander.Command{
+			levelingCommand,
 		},
 		cache: options.Cache,
 	}
@@ -45,6 +57,13 @@ func (r *CommandRouter) Route(s *discordgo.Session, m *discordgo.MessageCreate) 
 		if strings.HasPrefix(m.Content, fmt.Sprintf("%s%s", prefix, command.Name)) {
 			logger.Infof("Command Executed: %v", command.Name)
 			command.Execute(s, m, r)
+		}
+	}
+
+	for _, command := range r.newCommands {
+		if strings.HasPrefix(m.Content, fmt.Sprintf("%s%s", prefix, command.Use)) {
+			logger.Infof("Command Executed: %v", command.Use)
+			command.Execute(s, m)
 		}
 	}
 
