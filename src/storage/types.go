@@ -46,7 +46,7 @@ func WithGuildID(guildID string) Option {
 type ByLevel []*User
 
 func (a ByLevel) Len() int           { return len(a) }
-func (a ByLevel) Less(i, j int) bool { return a[i].Level < a[j].Level }
+func (a ByLevel) Less(i, j int) bool { return a[i].Level > a[j].Level }
 func (a ByLevel) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 
 type User struct {

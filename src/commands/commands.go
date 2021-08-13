@@ -7,6 +7,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"wxwatch.dev/bot/pkg/commander"
 	"wxwatch.dev/bot/src/cache"
+	"wxwatch.dev/bot/src/discord"
 	"wxwatch.dev/bot/src/leveling"
 	"wxwatch.dev/bot/src/storage"
 )
@@ -46,6 +47,16 @@ func NewCommandRouter(options *Options) *CommandRouter {
 		},
 		cache: options.Cache,
 	}
+}
+
+func (r *CommandRouter) SetupSlashCommands(bot *discord.Bot) {
+	bot.SetupApplicationCommands(applicationCommands, func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		if h, ok := handlers[i.ApplicationCommandData().Name]; ok {
+			logger.Infof("Slash Command Executed: %v", i.ApplicationCommandData().Name)
+			h(s, i)
+		}
+	})
+
 }
 
 func (r *CommandRouter) Route(s *discordgo.Session, m *discordgo.MessageCreate) {
