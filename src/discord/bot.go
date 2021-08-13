@@ -1,6 +1,8 @@
 package discord
 
 import (
+	"log"
+
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -24,12 +26,24 @@ func NewBot(options *Options) *Bot {
 	}
 }
 
-func (b *Bot) Setup(handlers []interface{}) {
+func (b *Bot) SetupHandlers(handlers []interface{}) {
 	for _, handler := range handlers {
 		b.session.AddHandler(handler)
 	}
 
 	b.session.Identify.Intents = discordgo.IntentsGuildMessages
+}
+
+func (b *Bot) SetupApplicationCommands(commands []*discordgo.ApplicationCommand, handler func(s *discordgo.Session, i *discordgo.InteractionCreate)) {
+	// Slash command stuff
+	for _, command := range commands {
+		_, err := b.session.ApplicationCommandCreate(b.session.State.User.ID, "", command)
+		if err != nil {
+			log.Panicf("Cannot create '%v' command: %v", command.Name, err)
+		}
+	}
+
+	b.session.AddHandler(handler)
 }
 
 func (b *Bot) Connect() error {

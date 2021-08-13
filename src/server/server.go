@@ -47,12 +47,16 @@ func (s *Server) Start() error {
 		// listener.Listen,
 	}
 
-	s.bot.Setup(handlers)
+	s.bot.SetupHandlers(handlers)
 
 	err := s.bot.Connect()
 	if err != nil {
 		return err
 	}
+
+	// Need the bot user to set up all this
+	router.SetupSlashCommands(s.bot)
+	levelingListener.Setup(s.bot)
 
 	return err
 }

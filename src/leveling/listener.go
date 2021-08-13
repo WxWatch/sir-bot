@@ -3,8 +3,11 @@ package leveling
 import (
 	"fmt"
 	"math/rand"
+	"sort"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
+	"wxwatch.dev/bot/src/discord"
 	"wxwatch.dev/bot/src/storage"
 )
 
@@ -30,6 +33,8 @@ func WithStorage(storage storage.Storage) Option {
 
 type LevelingListener struct {
 	storage storage.Storage
+
+	ApplicationCommands *[]discordgo.ApplicationCommand
 }
 
 func NewLevelingListener(opts ...Option) *LevelingListener {
@@ -44,6 +49,63 @@ func NewLevelingListener(opts ...Option) *LevelingListener {
 	return &LevelingListener{
 		storage: options.storage,
 	}
+}
+
+func (l *LevelingListener) Setup(bot *discord.Bot) {
+	applicationHandler := func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		if len(i.ApplicationCommandData().Options) == 0 {
+			return
+		}
+
+		logger.Infof("Slash Command Executed: %v %v", i.ApplicationCommandData().Name, i.ApplicationCommandData().Options[0].Name)
+		switch i.ApplicationCommandData().Options[0].Name {
+		case "help":
+			content :=
+				"There's a leaderboard command, at least"
+			s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseChannelMessageWithSource,
+				Data: &discordgo.InteractionResponseData{
+					Content: content,
+				},
+			})
+		case "leaderboard":
+			users, _ := l.storage.GetUsers(i.GuildID)
+			sort.Sort(storage.ByLevel(users))
+
+			var names strings.Builder
+			var levels strings.Builder
+			for _, user := range users {
+				discordUser, _ := s.User(user.ID)
+				names.WriteString(fmt.Sprintln(discordUser.Username))
+				levels.WriteString(fmt.Sprintln(user.Level))
+			}
+
+			embed := &discordgo.MessageEmbed{
+				Title: "Leaderboard",
+				Fields: []*discordgo.MessageEmbedField{
+					{
+						Name:   "User",
+						Value:  names.String(),
+						Inline: true,
+					},
+					{
+						Name:   "Level",
+						Value:  levels.String(),
+						Inline: true,
+					},
+				},
+			}
+
+			s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+				Type: discordgo.InteractionResponseChannelMessageWithSource,
+				Data: &discordgo.InteractionResponseData{
+					Embeds: []*discordgo.MessageEmbed{embed},
+				},
+			})
+		}
+	}
+
+	bot.SetupApplicationCommands(applicationCommands, applicationHandler)
 }
 
 func (l *LevelingListener) Listen(s *discordgo.Session, m *discordgo.MessageCreate) {

@@ -11,7 +11,27 @@ var CruiseFact = &Command{
 	Execute: cruiseFact,
 }
 
+var CruiseFactSlash = &discordgo.ApplicationCommand{
+	Name:        "cruisefact",
+	Description: "Displays a random fact about Cruise and/or onions.",
+}
+
+var CruiseFactHandler = func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: getCruiseFact(),
+		},
+	})
+}
+
 func cruiseFact(s *discordgo.Session, m *discordgo.MessageCreate, r *CommandRouter) error {
+	s.ChannelMessageSend(m.ChannelID, getCruiseFact())
+
+	return nil
+}
+
+func getCruiseFact() string {
 	facts := []string{
 		"Cruise loves onions.",
 		"According to the National Onion Association, U.S. onion consumption has increased 50% in the last 20 years.",
@@ -30,7 +50,5 @@ func cruiseFact(s *discordgo.Session, m *discordgo.MessageCreate, r *CommandRout
 
 	idx := rand.Intn(len(facts))
 
-	s.ChannelMessageSend(m.ChannelID, facts[idx])
-
-	return nil
+	return facts[idx]
 }
