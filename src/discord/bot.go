@@ -37,7 +37,7 @@ func (b *Bot) SetupHandlers(handlers []interface{}) {
 func (b *Bot) SetupApplicationCommands(commands []*discordgo.ApplicationCommand, handler func(s *discordgo.Session, i *discordgo.InteractionCreate)) {
 	// Slash command stuff
 	for _, command := range commands {
-		_, err := b.session.ApplicationCommandCreate(b.session.State.User.ID, "380399542496919558", command)
+		_, err := b.session.ApplicationCommandCreate(b.session.State.User.ID, "", command)
 		if err != nil {
 			log.Panicf("Cannot create '%v' command: %v", command.Name, err)
 		}
