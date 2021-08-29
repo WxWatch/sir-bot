@@ -57,7 +57,6 @@ func (l *LevelingListener) Setup(bot *discord.Bot) {
 			return
 		}
 
-		logger.Infof("Slash Command Executed: %v %v", i.ApplicationCommandData().Name, i.ApplicationCommandData().Options[0].Name)
 		switch i.ApplicationCommandData().Options[0].Name {
 		case "help":
 			content :=
@@ -102,7 +101,11 @@ func (l *LevelingListener) Setup(bot *discord.Bot) {
 					Embeds: []*discordgo.MessageEmbed{embed},
 				},
 			})
+		default:
+			return
 		}
+
+		logger.Infof("Slash Command Executed: %v %v", i.ApplicationCommandData().Name, i.ApplicationCommandData().Options[0].Name)
 	}
 
 	bot.SetupApplicationCommands(applicationCommands, applicationHandler)

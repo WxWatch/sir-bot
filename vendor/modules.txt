@@ -4,8 +4,10 @@ github.com/bwmarrin/discordgo
 # github.com/golang/snappy v0.0.0-20180518054509-2e65f85255db
 github.com/golang/snappy
 # github.com/gorilla/websocket v1.4.2
-## explicit
 github.com/gorilla/websocket
+# github.com/hashicorp/go-cleanhttp v0.5.2
+## explicit
+github.com/hashicorp/go-cleanhttp
 # github.com/stretchr/testify v1.7.0
 ## explicit
 # github.com/syndtr/goleveldb v1.0.0
