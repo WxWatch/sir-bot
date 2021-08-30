@@ -15,7 +15,12 @@ type Character struct {
 	Server string `json:"Server"`
 
 	//Extended Information
-	ClassJobs []*ClassJob `json:"ClassJobs"`
+	DC             string       `json:"DC"`
+	ClassJobs      []*ClassJob  `json:"ClassJobs"`
+	ActiveClassJob *ClassJob    `json:"ActiveClassJob"`
+	Race           *GenericInfo `json:"Race"`
+	Title          *GenericInfo `json:"Title"`
+	Town           *GenericInfo `json:"Town"`
 }
 
 type ClassJob struct {
@@ -26,9 +31,21 @@ type ClassJob struct {
 }
 
 type Class struct {
-	Abbreviation string `json:"Abbreviation"`
+	Abbreviation     string           `json:"Abbreviation"`
+	ClassJobCategory ClassJobCategory `json:"ClassJobCategory"`
 }
 
 type Job struct {
-	Abbreviation string `json:"Abbreviation"`
+	Abbreviation     string           `json:"Abbreviation"`
+	ClassJobCategory ClassJobCategory `json:"ClassJobCategory"`
+}
+
+type ClassJobCategory struct {
+	ID   int    `json:"ID"`
+	Name string `json:"Name"`
+}
+
+type GenericInfo struct {
+	ID   int    `json:"ID"`
+	Name string `json:"Name"`
 }

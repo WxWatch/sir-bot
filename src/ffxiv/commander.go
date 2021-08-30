@@ -6,6 +6,12 @@ import (
 	"wxwatch.dev/bot/src/discord"
 )
 
+const (
+	characterNameOption = "character-name"
+	serverOption        = "server"
+	showClassesOption   = "show-classes"
+)
+
 var applicationCommands = []*discordgo.ApplicationCommand{
 	{
 		Name:        "ffxiv",
@@ -23,9 +29,19 @@ var applicationCommands = []*discordgo.ApplicationCommand{
 				Options: []*discordgo.ApplicationCommandOption{
 					{
 						Type:        discordgo.ApplicationCommandOptionString,
-						Name:        "character-name",
+						Name:        characterNameOption,
 						Description: "Name of the character to lookup",
 						Required:    true,
+					},
+					{
+						Type:        discordgo.ApplicationCommandOptionString,
+						Name:        serverOption,
+						Description: "Optional server of the character",
+					},
+					{
+						Type:        discordgo.ApplicationCommandOptionBoolean,
+						Name:        showClassesOption,
+						Description: "If true, show all classes",
 					},
 				},
 			},
@@ -61,27 +77,7 @@ func (c *FFXIVCommander) Setup(bot *discord.Bot) {
 				},
 			})
 		case "character":
-			s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-				Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
-			})
-
-			characterName := i.ApplicationCommandData().Options[0].Options[0].StringValue()
-			character, err := c.GetCharacter(characterName)
-			if err != nil {
-				logger.Error(err)
-			}
-			embed := c.BasicCharacterEmbed(character)
-
-			s.InteractionResponseEdit(s.State.User.ID, i.Interaction, &discordgo.WebhookEdit{
-				Embeds: []*discordgo.MessageEmbed{embed},
-			})
-
-			character, _ = c.GetCharacterDetails(character.ID)
-			embed, _ = c.CharacterDetailEmbed(character)
-
-			s.InteractionResponseEdit(s.State.User.ID, i.Interaction, &discordgo.WebhookEdit{
-				Embeds: []*discordgo.MessageEmbed{embed},
-			})
+			c.characterHandler(s, i)
 		}
 	}
 

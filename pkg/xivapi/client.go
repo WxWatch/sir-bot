@@ -22,8 +22,8 @@ func NewClient() *Client {
 	}
 }
 
-func (c *Client) CharacterSearch(name string) (*Character, error) {
-	url := fmt.Sprintf("%s/character/search?name=%s", baseURL, url.QueryEscape(name))
+func (c *Client) CharacterSearch(name, server string) (*Character, error) {
+	url := fmt.Sprintf("%s/character/search?name=%s&server=%s", baseURL, url.QueryEscape(name), url.QueryEscape(server))
 
 	r, err := c.client.Get(url)
 	if err != nil {
