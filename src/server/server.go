@@ -5,6 +5,7 @@ import (
 	"wxwatch.dev/bot/src/commands"
 	"wxwatch.dev/bot/src/discord"
 	"wxwatch.dev/bot/src/ffxiv"
+	"wxwatch.dev/bot/src/image"
 	"wxwatch.dev/bot/src/leveling"
 	"wxwatch.dev/bot/src/storage"
 )
@@ -56,11 +57,13 @@ func (s *Server) Start() error {
 	}
 
 	ffCommander := ffxiv.NewFFXIVCommander()
+	imageCommander := image.NewImageCommander()
 
 	// Need the bot user to set up all this
 	router.SetupSlashCommands(s.bot)
 	levelingListener.Setup(s.bot)
 	ffCommander.Setup(s.bot)
+	imageCommander.Setup(s.bot)
 
 	return err
 }
