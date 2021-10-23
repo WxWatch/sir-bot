@@ -5,6 +5,7 @@ import (
 	"wxwatch.dev/bot/src/commands"
 	"wxwatch.dev/bot/src/discord"
 	"wxwatch.dev/bot/src/ffxiv"
+	"wxwatch.dev/bot/src/gacha"
 	"wxwatch.dev/bot/src/image"
 	"wxwatch.dev/bot/src/leveling"
 	"wxwatch.dev/bot/src/storage"
@@ -64,6 +65,8 @@ func (s *Server) Start() error {
 	levelingListener.Setup(s.bot)
 	ffCommander.Setup(s.bot)
 	imageCommander.Setup(s.bot)
+
+	gacha.NewGachaCommander().Setup(s.bot)
 
 	return err
 }

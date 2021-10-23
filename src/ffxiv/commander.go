@@ -65,6 +65,10 @@ func (c *FFXIVCommander) Setup(bot *discord.Bot) {
 			return
 		}
 
+		if i.ApplicationCommandData().Name != "ffxiv" {
+			return
+		}
+
 		logger.Infof("Slash Command Executed: %v %v", i.ApplicationCommandData().Name, i.ApplicationCommandData().Options[0].Name)
 		switch i.ApplicationCommandData().Options[0].Name {
 		case "about":
